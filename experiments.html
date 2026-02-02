@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="color-scheme" content="light">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.pumpkin.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/default.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"></script>
+    <script>hljs.highlightAll();</script>
+    <title>Experiments</title>
+</head>
+<body>
+    <main class="container">
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="experiments.html">Experiments</a></li>
+                <li><a href="presentations.html">Presentations</a></li>
+                <li><a href="https://github.com/edwardanderson">GitHub</a></li>
+                <li><a href="https://www.linkedin.com/in/edward-anderson-uk">LinkedIn</a></li>                
+            </ul>
+        </nav>
+        <h1>Experiments</h1>
+        <article>
+            <h2>RDFS Pydantic</h2>
+            <p>
+                Would it be useful to generate data contracts from arbitrary RDFS ontologies? <a
+                    href="https://github.com/edwardanderson/rdfs_pydantic">RDFS Pydantic</a> is an exploratory prototype.
+            </p>
+            <pre>
+                <code class="language-turtle">
+                    @prefix ex: &lt;http://example.org/&gt; .
+                    @prefix rdf: &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#&gt; .
+                    @prefix rdfs: &lt;http://www.w3.org/2000/01/rdf-schema#&gt; .
+
+                    ex:Example a rdfs:Class ;
+                        rdfs:label "An Example class"
+                        rdfs:comment "Useful for examples" .
+
+                    ex:name a rdf:Property ;
+                        rdfs:domain ex:Example ;
+                        rdfs:range rdfs:Literal
+
+                    ex:example_property a rdf:Property ;
+                        rdfs:domain ex:Example ;
+                        rdfs:range ex:Example .
+                </code>
+            </pre>
+            <pre>
+                <code class="language-python">
+                    from pydantic import BaseModel, Field
+
+                    class Example(BaseModel):
+                        """
+                        An Example class <http://example.org/Example>.
+
+                        Useful for examples.
+                        """
+                        example_property: Example | list[Example] = Field(default_factory=list)
+                        name: str | list[str] = Field(default_factory=list)
+                </code>
+            </pre>
+        </article>
+        <article>
+            <h2>Nested Triple Trees Language</h2>
+            <p>
+                <a href="https://github.com/edwardanderson/nettle">Nettle</a> is a specification for a
+                compact, human-friendly concrete syntax for RDF. It expresses triples as indented trees
+                so that related resources may be visually grouped.
+                <pre>
+                    <code class="language-nettle">
+                    base http://example.org/
+                    prefix schema https://schema.org/
+
+                    Mick
+                    a
+                        schema:Person
+                    schema:name
+                        "Sir Michael Philip Jagger"@en
+                    knows
+                        Keith
+                    </code>
+                </pre>
+            </p>
+        </article>
+            <article>
+            <h2>Knowledge Representation Markup Language</h2>
+            <p>
+                <p><a href="https://github.com/edwardanderson/krml">KRML</a> is a simple language for creating RDF knowledge graphs using Markdown elements:
+                lists of hyperlinks, images, tables and styled or plain text.</p>
+                <p>I wrote a <a href="https://www.linkedin.com/posts/edward-anderson-uk_what-if-creating-linked-open-data-was-less-activity-7281713690104496128-3zKV">few words about the project</a> on LinkedIn.</p>
+                <pre>
+                    <code class="language-markdown">
+                    - [Mona Lisa](http://www.wikidata.org/entity/Q12418)
+                      - [title](https://schema.org/name)
+                        - > Mona Lisa
+                        - > La joconde `fr`
+                        - > la Gioconda `it`
+                        - > モナ・リザ `jp`
+                      - a
+                        - Painting
+                    </code>
+                </pre>
+            </p>
+        </article>
+        <article>
+            <h2>(Almost) All the Art in the Rijksmuseum</h2>
+            <p>
+                Responding to <a href="https://mtchl.net/generous-interfaces-for-digital-cultural-collections/">
+                    <i>Generous Interfaces for Digital Cultural Collections</i></a>,
+                what if you could look at every single object in the Rijksmuseum? How long would
+                that take? Scrolling by at a rate of one every fifth of a second viewing the
+                400,000 photographed objects would take about four hours. Or until you run out of
+                disk space.
+            </p>
+            <iframe
+                width="560"
+                height="315"
+                src="https://www.youtube.com/embed/o1fq-5wsaYs?si=hWadrIsnZDDGU1u5"
+                title="YouTube video player"
+                frameborder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                referrerpolicy="strict-origin-when-cross-origin"
+                allowfullscreen>
+            </iframe>
+        </article>
+        <article>
+            <h2>Bits and pieces at the Rijksmuseum</h2>
+            <p>
+                Household tat as an interface to an art collection.
+            </p>
+            <video
+                loop="true"
+                width="100%"
+                autoplay="autoplay"
+                controls
+                muted>
+                <source src="media/household_objects.mp4" type="video/mp4"/>
+            </video>
+        </article>
+        <article>
+            <h2>Niet te vergeten</h2>
+            <p>
+                An interactive installation that explores the long tail of rarely visited artworks
+                in the Rijksmuseum and Volkenkunde collections. Write-up by Netwerk Digitaal Erfgoed in 
+                <a href="https://netwerkdigitaalerfgoed.nl/nieuws/winnaars-hackalod-2019/">Winnaars HackaLOD 2019</a>.
+                Made with
+                <a href="https://matussolcany.com/">Matúš Solčány</a>,
+                <a href="https://www.phivk.com/">Philo van Kemenade</a>,
+                <a href="https://jtheuns.com/">Jorim Theuns</a>,
+                and <a href="https://www.universiteitleiden.nl/en/staffmembers/ben-companjen">Ben Companjen</a>.
+                Code available in
+                <a href="https://github.com/phivk/hackalod2019?tab=readme-ov-file">the GitHub repository</a>.
+            </p>
+            <img
+                src="media/niet_te_vergeten.jpg"
+                width="100%"
+                alt="3D render of an interactive installation, showing a figure viewing image of museum objects."
+            />
+            <small>Image: Matúš Solčány</small>
+        </article>
+    </main>
+</body>
+
+</html>
